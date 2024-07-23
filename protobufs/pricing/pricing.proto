@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package pricing;
+
+option go_package = "github.com/jamiewhitney/fairways-core/pricing";
+
+import "google/api/annotations.proto";
+
+service PricingService {
+    rpc GetPrice (GetPriceRequest) returns (GetPriceResponse) {
+        option (google.api.http) = {
+            get: "/v1/pricing/price"
+        };
+    }
+    rpc GetPriceStream (stream GetPriceRequest) returns (stream GetPriceResponse) {};
+}
+
+message GetPriceRequest {
+    int64 course_id = 1;
+    string datetime = 2;
+    int64 golfers = 3;
+}
+
+message GetPriceResponse {
+    double price = 1;
+    string course_id = 2;
+    string datetime = 3;
+    double original_price = 4;
+    bool discounted = 5;
+}

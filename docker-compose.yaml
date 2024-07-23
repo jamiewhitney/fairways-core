@@ -1,0 +1,92 @@
+services:
+  database:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - database:/var/lib/mysql
+      - ./build/mysql/db.sql:/docker-entrypoint-initdb.d/db.sql
+  cache:
+    image: redis
+    ports:
+      - "6379:6379"
+  bookings:
+    build:
+      context: .
+      dockerfile: build/docker/Dockerfile
+      args:
+        - SERVICE=bookings
+    depends_on:
+      - database
+    environment:
+      - DB_USERPASS=root:root
+      - DB_HOST=database
+      - DB_NAME=bookings
+    ports:
+      - "3000:3000"
+  catalog:
+    build:
+      context: .
+      dockerfile: build/docker/Dockerfile
+      args:
+        - SERVICE=catalog
+    depends_on:
+      - database
+    environment:
+      - DB_USERPASS=root:root
+      - DB_HOST=database
+      - REDIS_HOST=cache
+      - SECRET_MANAGER=vault
+      - DB_NAME=catalog
+    ports:
+      - "3001:3000"
+  tee-time:
+    build:
+      context: .
+      dockerfile: build/docker/Dockerfile
+      args:
+        - SERVICE=tee-time
+    depends_on:
+      - database
+    environment:
+      - DB_USERPASS=root:root
+      - DB_HOST=database
+      - PRICING_ADDR=pricing:3000
+      - BOOKING_ADDR=bookings:3000
+      - REDIS_HOST=cache
+      - DB_NAME=tee_times
+    ports:
+      - "3002:3008"
+  pricing:
+    build:
+      context: .
+      dockerfile: build/docker/Dockerfile
+      args:
+        - SERVICE=pricing
+    depends_on:
+      - database
+    environment:
+      - DB_USERPASS=root:root
+      - DB_HOST=database
+      - REDIS_HOST=cache
+      - DB_NAME=pricing
+    ports:
+      - "3003:3000"
+  gateway:
+    build:
+      context: .
+      dockerfile: build/docker/Dockerfile
+      args:
+        - SERVICE=grpc-gateway
+    ports:
+      - "8081:8081"
+    environment:
+      - CATALOG_ADDR=catalog:3000
+      - TEE_TIME_ADDR=tee-time:3008
+      - PRICING_ADDR=pricing:3000
+      - BOOKINGS_ADDR=bookings:3000
+volumes:
+  database:

@@ -1,0 +1,174 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "protobufs/pricing/pricing.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "PricingService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/pricing.PricingService/GetPriceStream": {
+      "post": {
+        "operationId": "PricingService_GetPriceStream",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/pricingGetPriceResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of pricingGetPriceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " (streaming inputs)",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pricingGetPriceRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PricingService"
+        ]
+      }
+    },
+    "/v1/pricing/price": {
+      "get": {
+        "operationId": "PricingService_GetPrice",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pricingGetPriceResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "datetime",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "golfers",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "PricingService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "pricingGetPriceRequest": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "datetime": {
+          "type": "string"
+        },
+        "golfers": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "pricingGetPriceResponse": {
+      "type": "object",
+      "properties": {
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "courseId": {
+          "type": "string"
+        },
+        "datetime": {
+          "type": "string"
+        },
+        "originalPrice": {
+          "type": "number",
+          "format": "double"
+        },
+        "discounted": {
+          "type": "boolean"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

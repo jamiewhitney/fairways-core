@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package event_bus;
+
+option go_package = "github.com/jamiewhitney/fairways-core/protobufs/event_bus";
+
+message Event {
+  float event_type_version = 1;
+  string message_id = 2;
+  string trace_id = 3;
+  string emitted_by = 4;
+  string emitted_at = 5;
+  float version = 6;
+  string event_type = 7;
+  oneof event_information {
+    Booking booking = 8;
+    Course course_update = 9;
+  }
+}
+
+message EventType {
+  string event_type = 1;
+}
+
+message Booking {
+  int64 id = 1;
+}
+
+message Course {
+  int64 id = 1;
+}

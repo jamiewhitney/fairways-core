@@ -1,0 +1,2 @@
+ALTER TABLE schedule
+    ADD COLUMN buffer BIGINT NOT NULL

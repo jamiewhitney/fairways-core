@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bookings
+  labels:
+    istio-injection: enabled
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookings
+  namespace: bookings
+  labels:
+    app: bookings
+spec:
+  selector:
+    matchLabels:
+      app: bookings
+  template:
+    metadata:
+      labels:
+        app: bookings
+    spec:
+      serviceAccountName: bookings
+      containers:
+        - name: bookings
+          image: bookings
+          ports:
+            - name: grpc
+              containerPort: 3000
+          env:
+            - name: REDIS_HOST
+              value: host.docker.internal
+            - name: DB_HOST
+              value: host.docker.internal
+            - name: DB_USER
+              value: root
+            - name: DB_PASSWORD
+              value: root
+            - name: DB_NAME
+              value: bookings
+          readinessProbe:
+            grpc:
+              port: 3000
+          livenessProbe:
+            grpc:
+              port: 3000
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookings
+  namespace: bookings
+  labels:
+    app: bookings
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookings
+  namespace: bookings
+  labels:
+    app: bookings
+spec:
+  type: ClusterIP
+  selector:
+    app: bookings
+  ports:
+    - name: grpc
+      port: 3000
+      targetPort: 3000

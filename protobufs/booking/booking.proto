@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package booking;
+
+option go_package = "github.com/jamiewhitney/fairways-core/protobufs/booking";
+
+service BookingService {
+    rpc GetBooking (GetBookingRequest) returns (GetBookingResponse) {}
+    rpc GetBookings (GetBookingsRequest) returns (GetBookingsResponse) {};
+    rpc CreateBooking (CreateBookingRequest) returns (CreateBookingResponse) {};
+    rpc GetConfirmedBookings (GetConfirmedBookingsRequest) returns (GetConfirmedBookingResponse) {};
+}
+
+message CreateBookingRequest {
+    string user_id = 1;
+    int64 course_id = 2;
+    string datetime = 3;
+    int64 golfers = 4;
+    string cc_number = 5;
+    int64 cc_month = 6;
+    int64 cc_year = 7;
+    int64 cc_cvv = 8;
+    string country = 9;
+    string currency = 10;
+    float price = 11;
+}
+
+message CreateBookingResponse {
+    Booking booking = 1;
+}
+
+message GetConfirmedBookingsRequest {
+    int64 course_id = 1;
+    string datetime = 2;
+}
+
+message GetConfirmedBookingResponse {
+    repeated Booking bookings = 1;
+}
+
+message GetBookingsRequest {
+    string user_id = 1;
+}
+
+message GetBookingsResponse {
+    repeated Booking bookings = 1;
+}
+
+message GetBookingRequest {
+    int64 id = 1;
+}
+
+message GetBookingResponse {
+    Booking booking = 1;
+}
+
+message Booking {
+    int64 id = 1;
+    string created_at = 2;
+    string updated_at = 3;
+    string user_id = 4;
+    int64 course_id = 5;
+    int64 golfers = 6;
+    string datetime = 7;
+    int64 price = 8;
+    string booking_id = 9;
+    string stripe_payment_id = 20;
+}

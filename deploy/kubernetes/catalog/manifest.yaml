@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: catalog
+  labels:
+    istio-injection: enabled
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog
+  namespace: catalog
+  labels:
+    app: catalog
+spec:
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      labels:
+        app: catalog
+    spec:
+      serviceAccountName: catalog
+      containers:
+        - name: catalog
+          image: catalog
+          ports:
+            - name: grpc
+              containerPort: 3009
+          env:
+            - name: REDIS_HOST
+              value: host.docker.internal
+            - name: DB_HOST
+              value: host.docker.internal
+            - name: VAULT_ADDR
+              value: http://host.docker.internal:8200
+            - name: ROLE
+              value: example
+            - name: VAULT_LOGIN_PATH
+              value: kubernetes
+            - name: PLATFORM
+              value: kubernetes
+            - name: LOG_LEVEL
+              value: debug
+          readinessProbe:
+            grpc:
+              port: 3009
+          livenessProbe:
+            grpc:
+              port: 3009
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: catalog
+  namespace: catalog
+  labels:
+    app: catalog
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog
+  namespace: catalog
+  labels:
+    app: catalog
+spec:
+  type: ClusterIP
+  selector:
+    app: catalog
+  ports:
+    - name: grpc
+      port: 3000
+      targetPort: 3009

@@ -1,0 +1,291 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "protobufs/catalog/catalog.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "CatalogService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/catalog.CatalogService/CourseExists": {
+      "post": {
+        "operationId": "CatalogService_CourseExists",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/catalogCourseExistsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/catalogCourseExistsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CatalogService"
+        ]
+      }
+    },
+    "/v1/catalog/courses": {
+      "get": {
+        "operationId": "CatalogService_GetCourses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/catalogGetCoursesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "CatalogService"
+        ]
+      },
+      "post": {
+        "operationId": "CatalogService_CreateCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/catalogCourse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/catalogCreateCourseRequest"
+            }
+          }
+        ],
+        "tags": [
+          "CatalogService"
+        ]
+      }
+    },
+    "/v1/catalog/courses/{courseId}": {
+      "get": {
+        "operationId": "CatalogService_GetCourse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/catalogCourse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "CatalogService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "catalogCourse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "features": {
+          "$ref": "#/definitions/catalogFeatures"
+        },
+        "town": {
+          "type": "string"
+        },
+        "county": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "shortDesc": {
+          "type": "string"
+        },
+        "fullDesc": {
+          "type": "string"
+        },
+        "live": {
+          "type": "boolean"
+        }
+      }
+    },
+    "catalogCourseExistsRequest": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "catalogCourseExistsResponse": {
+      "type": "object",
+      "properties": {
+        "exists": {
+          "type": "boolean"
+        }
+      }
+    },
+    "catalogCreateCourseRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "features": {
+          "$ref": "#/definitions/catalogFeatures"
+        },
+        "town": {
+          "type": "string"
+        },
+        "county": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "shortDesc": {
+          "type": "string"
+        },
+        "fullDesc": {
+          "type": "string"
+        }
+      }
+    },
+    "catalogFeatures": {
+      "type": "object",
+      "properties": {
+        "golfCarts": {
+          "type": "boolean"
+        },
+        "changingRooms": {
+          "type": "boolean"
+        },
+        "shower": {
+          "type": "boolean"
+        }
+      }
+    },
+    "catalogGetCoursesResponse": {
+      "type": "object",
+      "properties": {
+        "courses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/catalogCourse"
+          }
+        },
+        "limit": {
+          "type": "string",
+          "format": "int64"
+        },
+        "offset": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
