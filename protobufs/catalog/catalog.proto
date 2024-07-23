@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package catalog;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/jamiewhitney/fairways-core/protobufs/catalog";
+
+
+service CatalogService {
+  rpc CourseExists (CourseExistsRequest) returns (CourseExistsResponse) {}
+  rpc GetCourses (GetCoursesRequest) returns (GetCoursesResponse) {
+    option (google.api.http) = {
+      get: "/v1/catalog/courses"
+    };
+  }
+  rpc GetCourse (GetCourseRequest) returns (Course) {
+    option (google.api.http) = {
+      get: "/v1/catalog/courses/{course_id}"
+    };
+  }
+
+  rpc CreateCourse(CreateCourseRequest) returns (Course) {
+    option (google.api.http) = {
+      post: "/v1/catalog/courses"
+      body: "*"
+    };
+  }
+}
+
+message CreateCourseRequest {
+  string name = 1;
+  Features features = 2;
+  string town = 3;
+  string county = 4;
+  string postcode = 5;
+  string short_desc = 6;
+  string full_desc = 7;
+}
+
+message CourseExistsRequest {
+  int64 course_id = 1;
+}
+
+message CourseExistsResponse {
+  bool exists = 1;
+}
+
+message GetCoursesRequest {
+  int64 limit = 1;
+  int64 offset = 2;
+}
+
+message GetCourseRequest {
+  int64 course_id = 1;
+}
+
+message GetCoursesResponse {
+  repeated Course courses = 1;
+  int64 limit = 2;
+  int64 offset = 3;
+}
+
+message Course {
+  int64 id = 1;
+  string name = 6;
+  Features features = 7;
+  string town = 8;
+  string county = 9;
+  string postcode = 10;
+  string short_desc = 11;
+  string full_desc = 12;
+  bool live = 13;
+}
+
+message Features {
+  bool golf_carts = 1;
+  bool changing_rooms = 2;
+  bool shower = 3;
+}

@@ -1,0 +1,421 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "protobufs/tee_time/tee_time.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "TeeTimeService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/tee_time.TeeTimeService/GetTeeTimeByDateTime": {
+      "post": {
+        "operationId": "TeeTimeService_GetTeeTimeByDateTime",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/tee_timeGetTeeTimeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tee_timeGetTeeTimeDateRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeeTimeService"
+        ]
+      }
+    },
+    "/tee_time.TeeTimeService/InvalidateCache": {
+      "post": {
+        "operationId": "TeeTimeService_InvalidateCache",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/tee_timeInvalidateCacheResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tee_timeInvalidateCacheRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeeTimeService"
+        ]
+      }
+    },
+    "/v1/teetimes": {
+      "get": {
+        "operationId": "TeeTimeService_GetTeeTimes",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/tee_timeGetTeeTimesResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "available",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "golfers",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "TeeTimeService"
+        ]
+      },
+      "post": {
+        "operationId": "TeeTimeService_CreateTeeTimeSchedule",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/tee_timeCreateTeeTimeScheduleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/tee_timeCreateTeeTimeScheduleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TeeTimeService"
+        ]
+      }
+    },
+    "/v1/teetimes/{courseId}/overrides": {
+      "get": {
+        "operationId": "TeeTimeService_GetTeeTimeOverrides",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/tee_timeGetTeeTimeOverridesRequest"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "TeeTimeService"
+        ]
+      }
+    },
+    "/v1/teetimes/{courseId}/schedule": {
+      "get": {
+        "operationId": "TeeTimeService_GetTeeTimeSchedules",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/tee_timeGeeTeeTimeScheduleResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "courseId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "TeeTimeService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "tee_timeCreateTeeTimeScheduleRequest": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "day": {
+          "type": "string",
+          "format": "int64"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        },
+        "occurrence": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "tee_timeCreateTeeTimeScheduleResponse": {
+      "type": "object",
+      "properties": {
+        "created": {
+          "type": "boolean"
+        }
+      }
+    },
+    "tee_timeGeeTeeTimeScheduleResponse": {
+      "type": "object",
+      "properties": {
+        "schedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/tee_timeTeeTimeSchedule"
+          }
+        }
+      }
+    },
+    "tee_timeGetTeeTimeDateRequest": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "datetime": {
+          "type": "string"
+        },
+        "available": {
+          "type": "boolean"
+        }
+      }
+    },
+    "tee_timeGetTeeTimeOverridesRequest": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "tee_timeGetTeeTimeResponse": {
+      "type": "object",
+      "properties": {
+        "teetime": {
+          "$ref": "#/definitions/tee_timeTeeTime"
+        }
+      }
+    },
+    "tee_timeGetTeeTimesResponse": {
+      "type": "object",
+      "properties": {
+        "teetimes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/tee_timeTeeTime"
+          }
+        }
+      }
+    },
+    "tee_timeInvalidateCacheRequest": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "date": {
+          "type": "string"
+        },
+        "basePrice": {
+          "type": "boolean"
+        }
+      }
+    },
+    "tee_timeInvalidateCacheResponse": {
+      "type": "object",
+      "properties": {
+        "invalidated": {
+          "type": "boolean"
+        }
+      }
+    },
+    "tee_timeTeeTime": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "datetime": {
+          "type": "string"
+        },
+        "price": {
+          "type": "number",
+          "format": "double"
+        },
+        "originalPrice": {
+          "type": "number",
+          "format": "double"
+        },
+        "discounted": {
+          "type": "boolean"
+        },
+        "available": {
+          "type": "boolean"
+        }
+      }
+    },
+    "tee_timeTeeTimeSchedule": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "day": {
+          "type": "string",
+          "format": "int64"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        },
+        "occurrence": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}

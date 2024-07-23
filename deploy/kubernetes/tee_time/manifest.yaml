@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tee-time
+  labels:
+    istio-injection: enabled
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tee-time
+  namespace: tee-time
+  labels:
+    app: tee-time
+spec:
+  selector:
+    matchLabels:
+      app: tee-time
+  template:
+    metadata:
+      labels:
+        app: tee-time
+    spec:
+      serviceAccountName: tee-time
+      containers:
+        - name: tee-time
+          image: tee-time
+          ports:
+            - name: grpc
+              containerPort: 3008
+          env:
+            - name: REDIS_HOST
+              value: host.docker.internal
+            - name: DB_HOST
+              value: host.docker.internal
+            - name: DB_USER
+              value: root
+            - name: DB_PASSWORD
+              value: root
+            - name: DB_NAME
+              value: tee_times
+            - name: PRICING_ADDR
+              value: pricing.pricing:3000
+            - name: BOOKING_ADDR
+              value: bookings.bookings:3000
+          readinessProbe:
+            grpc:
+              port: 3008
+          livenessProbe:
+            grpc:
+              port: 3008
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tee-time
+  namespace: tee-time
+  labels:
+    app: tee-time
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tee-time
+  namespace: tee-time
+  labels:
+    app: tee-time
+spec:
+  type: ClusterIP
+  selector:
+    app: tee-time
+  ports:
+    - name: grpc
+      port: 3008
+      targetPort: 3008

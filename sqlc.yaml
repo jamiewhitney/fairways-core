@@ -1,0 +1,40 @@
+version: "2"
+sql:
+  - engine: "mysql"
+    queries: "migrations/catalog/query.sql"
+    schema: "migrations/catalog/"
+    name: catalog
+    gen:
+      go:
+        sql_package: "database/sql"
+        sql_driver: "github.com/go-sql-driver/mysql"
+        package: "repository"
+        out: "internal/catalog/repository"
+        emit_interface: true
+  - name: tee_time
+    engine: "mysql"
+    queries: "migrations/tee_time/query.sql"
+    schema: "migrations/tee_time/"
+    gen:
+      go:
+        sql_package: "database/sql"
+        sql_driver: "github.com/go-sql-driver/mysql"
+        package: "repository"
+        out: "internal/tee_time/repository"
+        emit_interface: true
+        emit_params_struct_pointers: true
+        emit_pointers_for_null_types: true
+  - name: booking
+    engine: "mysql"
+    queries: "migrations/bookings/query.sql"
+    schema: "migrations/bookings/"
+    gen:
+      go:
+        sql_package: "database/sql"
+        sql_driver: "github.com/go-sql-driver/mysql"
+        package: "repository"
+        out: "internal/bookings/repository"
+        emit_interface: true
+        emit_params_struct_pointers: true
+        emit_pointers_for_null_types: true
+

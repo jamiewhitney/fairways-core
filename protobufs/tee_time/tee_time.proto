@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package tee_time;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/jamiewhitney/fairways-core/protobufs/tee_time";
+
+service TeeTimeService {
+    rpc GetTeeTimeByDateTime (GetTeeTimeDateRequest) returns (GetTeeTimeResponse) {}
+    rpc GetTeeTimes (GetTeeTimesRequest) returns (GetTeeTimesResponse) {
+        option (google.api.http) = {
+            get: "/v1/teetimes"
+        };
+    }
+    rpc GetTeeTimeSchedules (GetTeeTimeScheduleRequest) returns (GeeTeeTimeScheduleResponse) {
+        option (google.api.http) = {
+            get: "/v1/teetimes/{course_id}/schedule"
+        };
+    }
+
+    rpc CreateTeeTimeSchedule (CreateTeeTimeScheduleRequest) returns (CreateTeeTimeScheduleResponse) {
+        option (google.api.http) = {
+            post: "/v1/teetimes"
+            body: "*"
+        };
+    }
+    rpc GetTeeTimeOverrides (GetTeeTimeOverridesRequest) returns (GetTeeTimeOverridesRequest) {
+        option (google.api.http) = {
+            get: "/v1/teetimes/{course_id}/overrides"
+        };
+    }
+    rpc InvalidateCache (InvalidateCacheRequest) returns (InvalidateCacheResponse) {}
+}
+
+message GetTeeTimeOverridesRequest {
+    int64 course_id = 1;
+}
+
+message GetTeeTimeOverridesResponse {
+    repeated TeeTimeOverride overrides = 1;
+}
+
+message TeeTimeOverride {
+    int64 course_id = 1;
+    string start_time = 3;
+    string end_time = 4;
+    int64 occurrence = 5;
+    string date = 6;
+    bool blocked = 7;
+}
+
+message CreateTeeTimeScheduleRequest {
+    int64 course_id = 1;
+    int64 day = 2;
+    string start_time = 3;
+    string end_time = 4;
+    int64 occurrence = 5;
+}
+
+message CreateTeeTimeScheduleResponse {
+    bool created = 1;
+}
+
+message GetTeeTimeDateRequest {
+    int64 course_id = 1;
+    string datetime = 2;
+    bool available = 3;
+}
+
+message GetTeeTimesRequest {
+    int64 course_id = 1;
+    string date = 2;
+    bool available = 3;
+    int64 golfers = 4;
+}
+
+message GetTeeTimeResponse {
+    TeeTime teetime = 1;
+}
+
+message GetTeeTimesResponse {
+    repeated TeeTime teetimes = 1;
+}
+
+message GetTeeTimeScheduleRequest {
+    int64 course_id = 1;
+    string date = 2;
+}
+
+message GeeTeeTimeScheduleResponse {
+    repeated TeeTimeSchedule schedule = 1;
+}
+
+message TeeTimeSchedule {
+    int64 course_id = 1;
+    int64 day = 2;
+    string start_time = 3;
+    string end_time = 4;
+    int64 occurrence = 5;
+}
+
+message InvalidateCacheRequest {
+    int64 course_id = 1;
+    string date = 2;
+    bool base_price = 3;
+}
+
+message InvalidateCacheResponse {
+    bool invalidated = 1;
+}
+message TeeTime {
+    uint64 course_id = 2;
+    string datetime = 3;
+    double price = 4;
+    double original_price = 5;
+    bool discounted = 6;
+    bool available = 7;
+}

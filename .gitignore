@@ -1,0 +1,9 @@
+.idea
+buf.lock
+
+.DS_Store
+
+.terraform
+*.tfstate
+*.tfstate.backup
+terraform.tfvars
